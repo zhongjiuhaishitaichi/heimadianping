@@ -78,7 +78,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
     private void isBlogLiked(Blog blog) {
         UserDTO userDTO = UserHolder.getUser();
         if (userDTO == null) {
-            return;
+            throw new RunException("请您先登录!");
         }
         Long userId = userDTO.getId();
         String blogKey = BLOG_LIKED_KEY + blog.getId();
@@ -123,6 +123,12 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
         return Result.ok(userDTOList);
     }
 
+    /**
+     * 保存到本地的同时
+     * 使用feed流 采用推模式 推到粉丝的收件箱
+     * @param blog
+     * @return
+     */
     @Override
     public Result saveBlog(Blog blog) {
         // 获取登录用户
@@ -153,6 +159,14 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
         return Result.ok(blog.getId());
     }
 
+    /**
+     * 滚动分页
+     *  上次查询的最小值 就是这次查询的最大值
+     *  偏移量 上次查询最后的那个值有多少位  这次就偏移这个值多少位向下查询
+     * @param max
+     * @param offset
+     * @return
+     */
     @Override
     public Result queryBlogOfFollow(Long max, Integer offset) {
         Long userId = UserHolder.getUser().getId();

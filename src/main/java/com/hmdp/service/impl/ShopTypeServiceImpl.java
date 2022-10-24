@@ -50,7 +50,7 @@ public class ShopTypeServiceImpl extends ServiceImpl<ShopTypeMapper, ShopType> i
             return Result.ok(shopTypeList);
         }
         List<ShopType> shopTypes = shopTypeMapper.getList();
-        if (shopTypes==null){
+        if (shopTypes==null||shopTypes.isEmpty()){
             return Result.fail("没有任何分类信息");
         }
         String shopTypesStr = JSONUtil.toJsonStr(shopTypes);

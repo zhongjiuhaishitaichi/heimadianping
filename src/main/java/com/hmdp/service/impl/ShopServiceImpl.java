@@ -231,6 +231,10 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
             // 返回数据
             return Result.ok(page.getRecords());
         }
+        /**
+         * 滚动分页
+         * 使用redis GEO
+         */
         //计算分页参数
         int from= (current - 1) * SystemConstants.DEFAULT_PAGE_SIZE;
         int end = current * SystemConstants.DEFAULT_PAGE_SIZE;

@@ -64,10 +64,9 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
     public Result isFollow(Long followUserId) {
         Long userId = UserHolder.getUser().getId();
         //查询是否关注
-        LambdaQueryWrapper<Follow> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Follow::getFollowUserId, followUserId).eq(Follow::getUserId, userId);
-        long count = this.count(queryWrapper);
-        return Result.ok(count > 0);
+        String followKey = "follows:" + userId;
+        Boolean isExist = stringRedisTemplate.opsForSet().isMember(followKey, followUserId.toString());
+        return Result.ok(isExist);
     }
 
     @Override
